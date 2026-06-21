@@ -1078,17 +1078,36 @@ nav { background: #070707; border-bottom: 1px solid var(--border); border-top: 3
     catch (err) { alert('Erro: ' + err.message); }
   };
 
-  // ── VARIANTES ─────────────────────────────────────────────
+  // ── // ── VARIANTES ─────────────────────────────────────────────
+  
+  // 1. Adicionar Grupo
   window.adicionarGrupo = (nomeInicial = '', tagsIniciais = []) => {
     const id = grupoIdCounter++;
     gruposVariantes.push({ id, nome: nomeInicial, tags: [...tagsIniciais] });
     renderGrupos();
   };
-// 1. Função de renderização atualizada
+
+  // 2. Remover Grupo (Faltava esta função)
+  window.removerGrupo = (gid) => {
+    gruposVariantes = gruposVariantes.filter(g => g.id !== gid);
+    renderGrupos();
+  };
+
+  // 3. Remover Tag Específica (Faltava esta função)
+  window.removerTagGrupo = (gid, tagIndex) => {
+    const grupo = gruposVariantes.find(g => g.id === gid);
+    if (grupo) {
+      grupo.tags.splice(tagIndex, 1);
+      renderGrupos();
+    }
+  };
+
+  // 4. Função de renderização
   const renderGrupos = () => {
     const container = $('variantes-container');
     if (!container) return;
     container.innerHTML = '';
+    
     gruposVariantes.forEach((grupo) => {
       const div = document.createElement('div');
       div.className = 'variante-grupo';
@@ -1105,7 +1124,6 @@ nav { background: #070707; border-bottom: 1px solid var(--border); border-top: 3
       container.appendChild(div);
     });
   };
-
   // 2. Controlador de eventos (delegação global)
   document.addEventListener('input', (e) => {
     if (e.target.classList.contains('input-nome-grupo')) {
